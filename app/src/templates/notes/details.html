@@ -1,0 +1,12 @@
+{% extends "_base.html" %}
+{% block content %}
+
+<div class="shadow p-3 mb-5 bg-body rounded">
+	<h2>{{ note.get_title() }}</h2>
+	<small>By: {{ author }}<br/>
+	Created: {{ note.get_timestamp() }}</small> <br/><br/>
+
+	{{ note.get_content() |safe }}<br/><br/>
+</div>
+
+{% endblock %}

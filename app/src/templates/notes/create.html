@@ -1,0 +1,78 @@
+{% extends "_base.html" %}
+
+{% for message in get_flashed_messages() %}
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+	  {{ message }}
+	  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+{% endfor %}
+
+<br/>
+<h2>Create new note</h2>
+<br/>
+
+{% block content %}
+<div class="shadow p-3 mb-5 bg-body rounded">
+    <form method="POST">
+        {{ form.title.label(class="form-label") }}
+
+        {{ form.title(class="form-control") }}
+
+        <br/>
+
+        {{ form.content.label(class="form-label") }}
+
+		{{ form.content(class="form-control", rows="10") }}
+		<br/>
+
+        {{ form.isPublic.label }} {{ form.isPublic }}
+
+        <br/>
+
+        {{ form.isEncrypted.label}} {{ form.isEncrypted(id="isEncryptedCheckbox") }}
+        <br/><br/>
+
+        <div class="form-floating">
+            {{ form.password(placeholder="password", class="form-control mb-2",id="passwordInput") }}
+            {{ form.password.label }}
+              {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                  <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+          </div>
+        <br/>
+
+		
+		{{ form.submit(class="btn btn-secondary") }}
+
+
+    </form>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name="content") }}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var isEncryptedCheckbox = document.getElementById('isEncryptedCheckbox');
+        var passwordInput = document.getElementById('passwordInput');
+
+        // Set initial state of password input based on checkbox
+        passwordInput.disabled = !isEncryptedCheckbox.checked;
+
+        // Attach a change event listener to the checkbox
+        isEncryptedCheckbox.addEventListener('change', function () {
+            // Enable or disable password input based on checkbox state
+            passwordInput.disabled = !isEncryptedCheckbox.checked;
+
+            // If the checkbox is checked, focus on the password input
+            if (isEncryptedCheckbox.checked) {
+                passwordInput.focus();
+            }
+        });
+    });
+</script>
+
+{% endblock %}

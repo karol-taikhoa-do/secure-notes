@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./secure_notes
+    command: gunicorn --bind 0.0.0.0:5000 main:app
+    volumes:
+      - ./secure_notes:/secure_notes
+    expose:
+      - 5000
+    env_file:
+      - ./secure_notes/.env
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/cert.crt:/etc/nginx/cert.crt
+      - ./nginx/certkey.key:/etc/nginx/certkey.key
+    depends_on:
+      - web

@@ -1,0 +1,56 @@
+{% extends "_base.html" %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+	
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+	  {{ message }}
+	  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+	
+{% endfor %}
+
+<h1 class="text-center"> Welcome {{current_user.get_name()}}!</h1>
+
+<div class="container">
+    <h2 class="text-center mt-5 mb-3">Dashboard</h2>
+    <div class="card">
+        <div class="card-header">
+            <a href="{{ url_for('notes.post_note') }}" class="btn btn-primary btn-sm">Create new note</a>
+        </div>
+        <div class="card-body">
+            
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Created</th>
+                        <th>Public</th>
+                        <th width="240px">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for note in notes %}
+                        <tr>                        
+                        <td>{{ note.get_title() }}</td>
+                        <td>{{ note.get_timestamp() }}</td>
+                        <td>{{ note.get_ispublic() }} </td>
+                        <td>
+                            <a href="{{ url_for('notes.details', id=note.id) }}" class="btn btn-primary btn-sm">Details</a>
+
+                            <a href="{{ url_for('notes.edit', id=note.id) }}" class="btn btn-secondary btn-sm">Edit</a>
+
+                            <a href="{{ url_for('notes.delete', id=note.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>                        
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
